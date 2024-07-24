@@ -1,0 +1,7 @@
+sudo dnf install gcc-arm-linux-gnu.armv7hl
+
+
+
+sudo dnf install gcc-arm-linux-gnu binutils-arm-linux-gnu glibc-arm-linux-gnu
+
+arm-linux-gcc -S -mfloat-abi=softfp -mfpu=neon -std=c99 -o first.s optimized_code_well_conditioned.c
