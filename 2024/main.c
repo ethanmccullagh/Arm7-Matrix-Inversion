@@ -62,33 +62,31 @@ int main(int argc, char *argv[])
     aboveDiagonal();
     printMatrix(&matrix);
 
-    // float values[25];
-    // float inverseMatrix[ROWS][COLS];
-    // int j_counter = 0;
-    // int i_counter = 0;
+    float values[25];
+    float inverseMatrix[ROWS][COLS];
+   
 
-    // for(int i=5; i< 10; i++)
-    // {
-    //     for( int j = 5; j < 10; j++)
-    //     {
-    //         inverseMatrix[i_counter][j_counter] = matrix[i][j];
-    //         j_counter++; 
-    //     }
-    //     i_counter++;
-    //     j_counter = 0;
-    // }
+    for(int i=0; i< ROWS; i++)
+    {
+        for( int j = 0 ; j < COLS; j++)
+        {
+            inverseMatrix[i][j] = matrix[i][j+COLS];
+         
+        }
+       
+    }
 
 
     //in order to use code below need to store inverse matrix somewhere 
-    // printf("Invers Matrix: \n");
+    printf("Invers Matrix: \n");
 
-    // for (int i = 0; i < ROWS; i++) {
+    for (int i = 0; i < ROWS; i++) {
         
-    //     for (int j = 0; j < COLS; j++) {
-    //         printf("%f ", inverseMatrix[i][j]);
-    //     }
-    //     printf("\n");
-    // }
+        for (int j = 0; j < COLS; j++) {
+            printf("%8.2f ", inverseMatrix[i][j]);
+        }
+        printf("\n");
+    }
 
     float k = getConditionNumber(initial,inverseMatrix);
     printf("condition number : %f \n",k );
@@ -162,28 +160,6 @@ void multiply()
     printMatrix();
 }
 
-
-//float getInverseMatrix (float matrix[][COLS*2])
-// {   
-//     float values[25];
-//     float inverseMatrix[ROWS][COLS];
-//     int j_counter = 0;
-//     int i_counter = 0;
-
-//     for(int i=5; i< 10; i++)
-//     {
-//         for( int j = 5; j < 10; j++)
-//         {
-//             inverseMatrix[i_counter][j_counter] = matrix[i][j];
-//             j_counter++; 
-//         }
-//         i_counter++;
-//         j_counter = 0;
-//     }
-
-//     return inverseMatrix;
-
-// }
 
 // returns the max value in a matrix
 float findMaxAbsValue (float matrix[ROWS][COLS])
