@@ -15,9 +15,7 @@ void setOnes();
 void aboveDiagonal();
 void normalize();
 
-// Try aligning the matrix data in memory to improve the cache efficiency 
-
-__attribute__(aligned(16))
+// Try aligning the matrix data in memory to improve the cache efficiency __attribute__(aligned(16))
 
 int32_t matrix[ROWS][COLS * 2] = {
     {7, 7, 8, 3, 2},
