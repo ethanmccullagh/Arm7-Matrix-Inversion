@@ -15,6 +15,10 @@ void setOnes();
 void aboveDiagonal();
 void normalize();
 
+// Try aligning the matrix data in memory to improve the cache efficiency 
+
+__attribute__(aligned(16))
+
 int32_t matrix[ROWS][COLS * 2] = {
     {7, 7, 8, 3, 2},
     {9, 6, 1, 1, 7},
@@ -31,6 +35,8 @@ int i, j, k;
 
 int main(int argc, char *argv[])
 {
+
+    /* can do some loop unrolling here */
     // build identity matrix
     for (i = 0; i < ROWS; i++)
     {
@@ -73,6 +79,7 @@ int main(int argc, char *argv[])
 void augment()
 {
 
+    //can do some loop unrolling here 
     for (i = 0; i < ROWS; i++)
     {
         for (j = 0; j < COLS * 2; j++)
@@ -89,7 +96,8 @@ void normalize()
     for (i = 0; i < ROWS; i++)
     {
         for (j = 0; j < COLS * 2; j++)
-        {
+        {   
+            //replace the division here 
             result[i][j] = ((float)matrix[i][j]) / 256;
             printf("%10.2f", result[i][j]);
         }
@@ -99,6 +107,7 @@ void normalize()
 
 void belowDiagonal()
 {
+    //can do some loop unrolling here
     // zeroes out all values below the identity line
     for (j = 0; j < COLS - 1; j++)
     {
@@ -135,6 +144,8 @@ void setOnes()
         scalar = matrix[i][i];
         for (j = 0; j < COLS * 2; j++)
         {
+
+            //replace the division by scalar with shift and x 
             matrix[i][j] = (matrix[i][j] << 8) / scalar;
             //matrix[i][j] = matrix[i][j] ;
         }
@@ -154,6 +165,8 @@ void aboveDiagonal()
             {
                 matrix[k][j] = matrix[k][j] << SCALE;
                 matrix[k][j] -= matrix[i][j] * scalar;
+
+                // instead of this we could do (matrix[k][j] << 8) + (matrix[k][j]  to replace division here 
                 matrix[k][j] = matrix[k][j] / 256;
             }
         }
