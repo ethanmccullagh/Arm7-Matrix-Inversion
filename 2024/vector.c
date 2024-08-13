@@ -3,6 +3,7 @@
 #include <stdio.h>
 #include <string.h>
 #include <time.h>
+#include <arm_neon.h>
 #define ROWS 5
 #define COLS 5
 #define dCOLS COLS * 2
@@ -27,7 +28,9 @@ float result[ROWS][COLS * 2];
 //int32_t temp[COLS * 2];
 
 int32_t scalar;
-int i, j, k;
+int i = 0;
+int j = 0;
+int k = 0;
 
 int main(int argc, char *argv[])
 {
@@ -130,11 +133,14 @@ void setOnes()
 {
     // divide out leading coefficiants to set identity line to 1
 
+    int32x4_t vec_row;
     for (i = 0; i < ROWS; i++)
     {
         scalar = matrix[i][i];
-        for (j = 0; j < COLS * 2; j++)
+        for (j = 0; j < COLS * 2; j+=4)
         {
+		vec_row = vld1q_s32(matrix[i] + j);
+
             matrix[i][j] = (matrix[i][j] << 8) / scalar;
             //matrix[i][j] = matrix[i][j] ;
         }
@@ -144,6 +150,9 @@ void setOnes()
 void aboveDiagonal()
 {
     // remove numbers above pivot
+    //
+    
+
 
     for (i = ROWS - 1; i > 0; i--)
     {

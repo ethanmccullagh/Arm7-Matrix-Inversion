@@ -7,4 +7,4 @@ opt: optimized.c
 	gcc -o opt optimized.c
 
 vector: vector.c
-	gcc -o vec vectorized.c
+	gcc -march=armv7-a -mfpu=neon -o vec vectorized.c
