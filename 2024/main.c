@@ -3,7 +3,10 @@
 #include <stdio.h>
 #include <string.h>
 #include <time.h>
+
+#include <math.h>
 #include <arm_neon.h>
+
 #define ROWS 5
 #define COLS 5
 
@@ -12,6 +15,8 @@ void belowDiagonal();
 void setOnes();
 void aboveDiagonal();
 void multiply();
+float getConditionNumber( float matrix[ROWS][COLS], float inverseMatrix[ROWS][COLS]);
+float findMaxAbsValue (float matrix[ROWS][COLS]);
 
 float initial[ROWS][COLS] = {
     {7, 7, 8, 3, 2},
@@ -59,6 +64,34 @@ int main(int argc, char *argv[])
     aboveDiagonal();
     printMatrix(&matrix);
 
+    float values[25];
+    float inverseMatrix[ROWS][COLS];
+   
+
+    for(int i=0; i< ROWS; i++)
+    {
+        for( int j = 0 ; j < COLS; j++)
+        {
+            inverseMatrix[i][j] = matrix[i][j+COLS];
+         
+        }
+       
+    }
+
+
+    //in order to use code below need to store inverse matrix somewhere 
+    printf("Invers Matrix: \n");
+
+    for (int i = 0; i < ROWS; i++) {
+        
+        for (int j = 0; j < COLS; j++) {
+            printf("%8.2f ", inverseMatrix[i][j]);
+        }
+        printf("\n");
+    }
+
+    float k = getConditionNumber(initial,inverseMatrix);
+    printf("condition number : %f \n",k );
 
     return 0;
 }
@@ -129,6 +162,36 @@ void multiply()
     printMatrix();
 }
 
+
+// returns the max value in a matrix
+float findMaxAbsValue (float matrix[ROWS][COLS])
+{
+    float maxVal = fabs(matrix[0][0]);
+
+    for(int i=0; i< ROWS; i++)
+    {
+        for( int j = 0; j < COLS; j++)
+        {
+            if(fabs(matrix[i][j]) > maxVal)
+            {
+                maxVal = matrix[i][j];
+            }
+        }
+    }
+
+    return maxVal;
+}
+
+// Returns the condition number 
+float getConditionNumber( float matrix[ROWS][COLS], float inverseMatrix[ROWS][COLS])
+{
+    
+    float matrixMaxVal = findMaxAbsValue(matrix);
+    float inverseMatrixMaxVal = findMaxAbsValue(inverseMatrix);
+
+   return matrixMaxVal * inverseMatrixMaxVal;
+}
+
 void printMatrix()
 {
     printf("----------Matrix----------\n");
@@ -143,3 +206,4 @@ void printMatrix()
         printf("\n");
     }
 }
+
