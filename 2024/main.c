@@ -3,6 +3,7 @@
 #include <stdio.h>
 #include <string.h>
 #include <time.h>
+#include <arm_neon.h>
 #define ROWS 5
 #define COLS 5
 
