@@ -174,10 +174,10 @@ void setOnes()
 
     int32x4_t vec_row;
     int32x4_t temp;
-
-    recipricol = 1/matrix[0][0]
     for (i = 0; i < ROWS; i++)
     {
+        scalar = matrix[i][i];
+        
         for (j = 0; j < COLS * 2; j = j + 4)
         {
             //loads row to vector
@@ -188,10 +188,8 @@ void setOnes()
 
             //stores the vector divided by the scalar to the matrix
             //TODO: Optomize this division "vec_row/scalar"
-            vst1q_s32(matrix[i] + j, vec_row*recipricol);
+            vst1q_s32(matrix[i] + j, vec_row/scalar);
         }
-
-        recipricol = 1/matrix[i+1][i+1];
     }
 }
 
