@@ -167,12 +167,13 @@ void setOnes()
     int32x4_t vec_row;
     int32x4_t temp;
 
-    recipricol= 1/matrix[0][0];
+    
     
     for (i = 0; i < ROWS; i++)
     {
        
-        
+        recipricol = vdupq_n_s32((int32_t)(1/matrix[i][i]));
+
         for (j = 0; j < COLS * 2; j = j + 4)
         {
             //loads row to vector
@@ -180,14 +181,13 @@ void setOnes()
 
             //shift vector left by 8
 	        vec_row = vshlq_n_s32 (vec_row, 8);
-
+            
             //stores the vector divided by the scalar to the matrix
             //TODO: Optomize this division "vec_row/scalar"
-
-            vst1q_s32(matrix[i] + j, vec_row*recipricol);
+            vec_row = vmulq_n_s32(vec_row,recipricol);
+            vst1q_s32(matrix[i] + j, vec_row);
         }
         
-        recipricol = 1/matrix[i+1][i+1];
     }
 }
 
