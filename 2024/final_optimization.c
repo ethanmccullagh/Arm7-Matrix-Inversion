@@ -172,7 +172,7 @@ void setOnes()
     for (i = 0; i < ROWS; i++)
     {
        
-        recipricol = (int32_t)(1/matrix[i][i]);
+        recipricol = (int32_t)((1/matrix[i][i])<<8);
         printf("recipricol: %d", recipricol);
         for (j = 0; j < COLS * 2; j = j + 4)
         {
