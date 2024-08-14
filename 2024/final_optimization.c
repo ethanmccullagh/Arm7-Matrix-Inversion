@@ -17,7 +17,7 @@ void aboveDiagonal();
 void normalize();
 
 // align memory to reduce cache misses 
-int32_t matrix[ROWS][COLS * 2]__attribute__(aligned(4)) = {
+int32_t matrix[ROWS][COLS * 2]__attribute__((aligned(4))) = {
     {7, 7, 8, 3},
     {9, 6, 1, 1},
     {10, 3, 5, 0},
