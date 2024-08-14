@@ -108,6 +108,10 @@ void normalize()
 
             //vst1q_f32(result[i]+j, flo);
 
+            //TODO: optomize this with vector operations
+            //converting an int vector to float vector didnt seem to work
+            //see above commented code
+
             result[i][j] = ((float)matrix[i][j]) / 256;
             printf("%10.2f", result[i][j]);
         }
@@ -136,20 +140,26 @@ void belowDiagonal()
                 //shifts the value left by 8
                 //matrix[i][k] = matrix[i][k] << SCALE;
                 
+                //load vectors
                 piv = vld1q_s32(matrix[j] + k);
                 vec = vld1q_s32(matrix[i] + k);
 
+                //shift selected vector left by 8
                 vec = vshlq_n_s32(vec, 8);
+
                 //subtracts the value of the pivot row from the current row multiplied by scalar
                 //matrix[i][k] -= matrix[j][k] * scalar;
 
+                //multiply pivot row by scalar
                 piv = vmulq_n_s32(piv, scalar);
 
+                //subtract pivot row from selected row
                 vec = vsubq_s32(vec, piv);
 
                 //shifts right by 8
                 //matrix[i][k] = matrix[i][k] >> SCALE;
 
+                //shift selected row right by 8 and store in matrix
                 vec = vshrq_n_s32(vec, 8);
 
                 vst1q_s32(matrix[i] + k, vec);
@@ -197,14 +207,19 @@ void aboveDiagonal()
             scalar = (matrix[k][i] << SCALE)/matrix[i][i];
             for (j = 0; j < COLS * 2; j+=4)
             {
+                //loads
                 vec = vld1q_s32(matrix[k] + j);
                 piv = vld1q_s32(matrix[i] + j);
 
+                //shift selected row left and multiply pivot by scalar
                 vec = vshlq_n_s32(vec, 8);
                 piv = vmulq_n_s32(piv, scalar);
+
+                //subtract pivot from selected and shift selected row right
                 vec = vsubq_s32(vec, piv);
                 vec = vshrq_n_s32(vec, 8);
 
+                //store
                 vst1q_s32(matrix[k] + j, vec);
 //                matrix[k][j] = matrix[k][j] << SCALE;
 //                matrix[k][j] -= matrix[i][j] * scalar;
