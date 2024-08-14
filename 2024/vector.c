@@ -4,8 +4,8 @@
 #include <string.h>
 #include <time.h>
 #include <arm_neon.h>
-#define ROWS 5
-#define COLS 5
+#define ROWS 4
+#define COLS 4
 #define dCOLS COLS * 2
 #define SCALE 8
 
@@ -17,11 +17,10 @@ void aboveDiagonal();
 void normalize();
 
 int32_t matrix[ROWS][COLS * 2] = {
-    {7, 7, 8, 3, 2},
-    {9, 6, 1, 1, 7},
-    {10, 3, 5, 0, 8},
-    {5, 8, 6, 4, 6},
-    {3, 5, 8, 10, 3}};
+    {7, 7, 8, 3},
+    {9, 6, 1, 1},
+    {10, 3, 5, 0},
+    {5, 8, 6, 4}};
 
 float result[ROWS][COLS * 2];
 
@@ -75,12 +74,16 @@ int main(int argc, char *argv[])
 
 void augment()
 {
-
+	uint32x4_t vec;
+	uint32x4_t temp;
     for (i = 0; i < ROWS; i++)
     {
-        for (j = 0; j < COLS * 2; j++)
+        for (j = 0; j < COLS * 2; j= j+4)
         {
-            matrix[i][j] = matrix[i][j] << 8;
+            vec = vld1q_u32(matrix[i] + j);
+            temp = vshlq_n_u32(vec, 8);
+            vst1q_u32(matrix[i] + j, temp);
+//            matrix[i][j] = matrix[i][j] << 8;
         }
     }
 }
@@ -134,14 +137,19 @@ void setOnes()
     // divide out leading coefficiants to set identity line to 1
 
     int32x4_t vec_row;
+    int32x4_t temp;
     for (i = 0; i < ROWS; i++)
     {
         scalar = matrix[i][i];
-        for (j = 0; j < COLS * 2; j+=4)
+        for (j = 0; j < COLS * 2; j = j + 4)
         {
-		vec_row = vld1q_s32(matrix[i] + j);
+	    vec_row = vld1q_s32(matrix[i] + j);
+	    vec_row = vshlq_n_s32 (vec_row, 8);
+	    //vec_row = vmulq_n_s32 (temp, 1/scalar);
 
-            matrix[i][j] = (matrix[i][j] << 8) / scalar;
+
+	    vst1q_s32(matrix[i] + j, vec_row);
+            //matrix[i][j] = (matrix[i][j] << 8) / scalar;
             //matrix[i][j] = matrix[i][j] ;
         }
     }
