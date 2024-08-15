@@ -82,13 +82,13 @@ void augment()
         for (j = 0; j < COLS * 2; j= j+4)
         {
             //loads matrix row to vector
-            vec = vld1q_u32(matrix[i] + j);
+            vec = vld1q_s32(matrix[i] + j);
 
             //shifts vector left by 8
-            vec = vshlq_n_u32(vec, 8);
+            vec = vshlq_n_s32(vec, 8);
 
             //stores vector to matrix
-            vst1q_u32(matrix[i] + j, vec);
+            vst1q_s32(matrix[i] + j, vec);
         }
     }
 }
