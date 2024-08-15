@@ -171,9 +171,9 @@ void setOnes()
     
     for (i = 0; i < ROWS; i++)
     {
-       
-        recipricol = (int32_t)((1/matrix[i][i])<<8);
-        printf("recipricol: %d", recipricol);
+	       
+        recipricol = ((1<<16)/matrix[i][i]);
+
         for (j = 0; j < COLS * 2; j = j + 4)
         {
             //loads row to vector
@@ -185,6 +185,7 @@ void setOnes()
             //stores the vector divided by the scalar to the matrix
             //TODO: Optomize this division "vec_row/scalar"
             vec_row = vmulq_n_s32(vec_row,recipricol);
+	    vec_row = vshrq_n_s32(vec_row, 16);
             vst1q_s32(matrix[i] + j, vec_row);
         }
         
