@@ -177,6 +177,7 @@ void setOnes()
     for (i = 0; i < ROWS; i++)
     {
         scalar = matrix[i][i];
+        
         for (j = 0; j < COLS * 2; j = j + 4)
         {
             //loads row to vector

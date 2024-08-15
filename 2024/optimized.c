@@ -107,7 +107,7 @@ void normalize()
 
 void belowDiagonal()
 {
-    //can do some loop unrolling here
+
     // zeroes out all values below the identity line
     for (j = 0; j < COLS - 1; j++)
     {
