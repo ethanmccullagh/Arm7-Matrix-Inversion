@@ -38,6 +38,9 @@ float32x4_t flo;
 
 int main(int argc, char *argv[])
 {
+    clock_t start;
+    start = clock();
+
     // build identity matrix
     for (i = 0; i < ROWS; i++)
     {
@@ -71,6 +74,9 @@ int main(int argc, char *argv[])
 
     normalize();
 
+    float runTime = (float)(clock() - start);
+
+    printf("Runtime: %.f clock cycles\n", runTime);
 
     return 0;
 }

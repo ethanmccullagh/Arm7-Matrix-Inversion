@@ -31,6 +31,7 @@ float scalar;
 
 int main(int argc, char *argv[])
 {
+    clock_t start = clock();
     // build matrix
     for (int i = 0; i < ROWS; i++)
     {
@@ -92,6 +93,9 @@ int main(int argc, char *argv[])
 
     float k = getConditionNumber(initial,inverseMatrix);
     printf("condition number : %f \n",k );
+
+    float runTime = (float)(clock() - start);
+    printf("Runtime: %.f cycles\n", runTime);
 
     return 0;
 }
