@@ -32,6 +32,9 @@ int32_t recipricol;
 int i = 0;
 int j = 0;
 int k = 0;
+int32x4_t vec;
+int32x4_t piv;
+float32x4_t flo;
 
 int main(int argc, char *argv[])
 {
@@ -74,7 +77,6 @@ int main(int argc, char *argv[])
 
 void augment()
 {
-	uint32x4_t vec;
     for (i = 0; i < ROWS; i++)
     {
         for (j = 0; j < COLS * 2; j= j+4)
@@ -95,8 +97,6 @@ void normalize()
 {
     printf("----------RESULT---------\n");
 
-    int32x4_t vec;
-    float32x4_t flo;
     recipricol = (1<<16)/256;
     for (i = 0; i < ROWS; i++)
     {
@@ -125,8 +125,6 @@ void belowDiagonal()
     // zeroes out all values below the identity line
     //
     // traverses columns left to right
-    int32x4_t vec;
-    int32x4_t piv;
     for (j = 0; j < COLS - 1; j++)
     {
         //traverses rows top to bottom, starting from the row below [j][j]
@@ -162,7 +160,6 @@ void belowDiagonal()
 
 void setOnes()
 {
-    int32x4_t vec_row;
     
     for (i = 0; i < ROWS; i++)
     {
@@ -172,16 +169,16 @@ void setOnes()
         for (j = 0; j < COLS * 2; j += 4)
         {
             // Load the current row into a vector
-            vec_row = vld1q_s32(matrix[i] + j);
+            vec = vld1q_s32(matrix[i] + j);
 
 	    //vec_row = vshlq_n_s32 (vec_row, 8);
             // Perform the fixed-point division via multiplication with reciprocal
-            vec_row = vmulq_n_s32 (vec_row, reciprocal);
+            vec = vmulq_n_s32 (vec, reciprocal);
 
             // Shift right to convert back to the original scale
-            vec_row = vshrq_n_s32 (vec_row, 12);
+            vec = vshrq_n_s32 (vec, 12);
             // Store the result back into the matrix
-            vst1q_s32(matrix[i] + j, vec_row);
+            vst1q_s32(matrix[i] + j, vec);
         }
     }
 }
@@ -192,9 +189,6 @@ void aboveDiagonal()
     // remove numbers above pivoti
     //
     
-
-    int32x4_t vec;
-    int32x4_t piv;
     for (i = ROWS - 1; i > 0; i--)
     {
         for (k = i - 1; k > -1; k--)
