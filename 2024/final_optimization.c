@@ -97,7 +97,7 @@ void normalize()
 
     int32x4_t vec;
     float32x4_t flo;
-
+    recipricol = (1<<16)/256;
     for (i = 0; i < ROWS; i++)
     {
         for (j = 0; j < COLS * 2; j++)
@@ -112,7 +112,7 @@ void normalize()
             //converting an int vector to float vector didnt seem to work
             //see above commented code
 
-            result[i][j] = ((float)matrix[i][j]) / 256;
+            result[i][j] = ((float)matrix[i][j])/256;
             printf("%10.2f", result[i][j]);
         }
         //for(k = 0; k < COLS*2; k++) printf("%10.2f", result[i][j]);
@@ -162,35 +162,30 @@ void belowDiagonal()
 
 void setOnes()
 {
-    // divide out leading coefficiants to set identity line to 1
-
     int32x4_t vec_row;
-    int32x4_t temp;
-
-    
     
     for (i = 0; i < ROWS; i++)
     {
-	       
-        recipricol = ((1<<16)/matrix[i][i]);
+        // Compute the fixed-point reciprocal scaled by 2^16
+        int32_t reciprocal = (1 << 16) / matrix[i][i];
 
-        for (j = 0; j < COLS * 2; j = j + 4)
+        for (j = 0; j < COLS * 2; j += 4)
         {
-            //loads row to vector
-	        vec_row = vld1q_s32(matrix[i] + j);
+            // Load the current row into a vector
+            vec_row = vld1q_s32(matrix[i] + j);
 
-            //shift vector left by 8
-	        vec_row = vshlq_n_s32 (vec_row, 8);
-            
-            //stores the vector divided by the scalar to the matrix
-            //TODO: Optomize this division "vec_row/scalar"
-            vec_row = vmulq_n_s32(vec_row,recipricol);
-	    vec_row = vshrq_n_s32(vec_row, 16);
+	    vec_row = vshlq_n_s32 (vec_row, 8);
+            // Perform the fixed-point division via multiplication with reciprocal
+            vec_row = vmulq_n_s32(vec_row, reciprocal);
+
+            // Shift right to convert back to the original scale
+            vec_row = vshrq_n_s32(vec_row, 16);
+            // Store the result back into the matrix
             vst1q_s32(matrix[i] + j, vec_row);
         }
-        
     }
 }
+
 
 void aboveDiagonal()
 {
