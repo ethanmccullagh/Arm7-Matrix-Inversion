@@ -167,19 +167,19 @@ void setOnes()
     for (i = 0; i < ROWS; i++)
     {
         // Compute the fixed-point reciprocal scaled by 2^16
-        int32_t reciprocal = (1 << 16) / matrix[i][i];
+        int32_t reciprocal = (1 << 20) / matrix[i][i]; // matrix[i][i] <<8
 
         for (j = 0; j < COLS * 2; j += 4)
         {
             // Load the current row into a vector
             vec_row = vld1q_s32(matrix[i] + j);
 
-	    vec_row = vshlq_n_s32 (vec_row, 8);
+	    //vec_row = vshlq_n_s32 (vec_row, 8);
             // Perform the fixed-point division via multiplication with reciprocal
-            vec_row = vmulq_n_s32(vec_row, reciprocal);
+            vec_row = vmulq_n_s32 (vec_row, reciprocal);
 
             // Shift right to convert back to the original scale
-            vec_row = vshrq_n_s32(vec_row, 16);
+            vec_row = vshrq_n_s32 (vec_row, 12);
             // Store the result back into the matrix
             vst1q_s32(matrix[i] + j, vec_row);
         }
@@ -189,7 +189,7 @@ void setOnes()
 
 void aboveDiagonal()
 {
-    // remove numbers above pivot
+    // remove numbers above pivoti
     //
     
 
