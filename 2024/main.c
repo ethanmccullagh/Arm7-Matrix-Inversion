@@ -82,17 +82,6 @@ int main(int argc, char *argv[])
        
     }
 
-
-    printf("Invers Matrix: \n");
-
-    for (int i = 0; i < ROWS; i++) {
-        
-        for (int j = 0; j < COLS; j++) {
-            printf("%8.2f ", inverseMatrix[i][j]);
-        }
-        printf("\n");
-    }
-
     float k = getConditionNumber(initial,inverseMatrix);
     printf("condition number : %f \n",k );
 
