@@ -5,10 +5,9 @@
 #include <time.h>
 
 #include <math.h>
-#include <arm_neon.h>
 
-#define ROWS 5
-#define COLS 5
+#define ROWS 10
+#define COLS 10
 
 void printMatrix();
 void belowDiagonal();
@@ -19,11 +18,16 @@ float getConditionNumber( float matrix[ROWS][COLS], float inverseMatrix[ROWS][CO
 float findMaxAbsValue (float matrix[ROWS][COLS]);
 
 float initial[ROWS][COLS] = {
-    {7, 7, 8, 3, 2},
-    {9, 6, 1, 1, 7},
-    {10, 3, 5, 0, 8},
-    {7, 7, 6, 4, 6},
-    {3, 5, 8, 10, 3}};
+    {9 ,3 ,2 ,5 ,3 ,7 ,4 ,3 ,2 ,2},
+    {9 ,6 ,8 ,1 ,4 ,6 ,5 ,3 ,2 ,6},
+    {3 ,3 ,1 ,4 ,2 ,7 ,7 ,2 ,6 ,3},
+    {4 ,6 ,5 ,7 ,1 ,2 ,4 ,7 ,6 ,4},
+    {2 ,8 ,7 ,5 ,9 ,6 ,3 ,10 ,10 ,5},
+    {6 ,2 ,5 ,2 ,2 ,7 ,7 ,6 ,2 ,10},
+    {6 ,9 ,4 ,9 ,2 ,9 ,7 ,7 ,7 ,4},
+    {8 ,10 ,1 ,2 ,10 ,9 ,3 ,7 ,7 ,9},
+    {2 ,10 ,1 ,6 ,6 ,9 ,6 ,3 ,2 ,9},
+    {7 ,5 ,1 ,3 ,8 ,2 ,9 ,7 ,4 ,7}};
 
 float matrix[ROWS][COLS * 2];
 
@@ -31,6 +35,7 @@ float scalar;
 
 int main(int argc, char *argv[])
 {
+    clock_t start = clock();
     // build matrix
     for (int i = 0; i < ROWS; i++)
     {
@@ -64,7 +69,6 @@ int main(int argc, char *argv[])
     aboveDiagonal();
     printMatrix(&matrix);
 
-    float values[25];
     float inverseMatrix[ROWS][COLS];
    
 
@@ -79,8 +83,7 @@ int main(int argc, char *argv[])
     }
 
 
-    //in order to use code below need to store inverse matrix somewhere 
-    printf("Invers Matrix: \n");
+    printf("Inverse Matrix: \n");
 
     for (int i = 0; i < ROWS; i++) {
         
@@ -92,6 +95,9 @@ int main(int argc, char *argv[])
 
     float k = getConditionNumber(initial,inverseMatrix);
     printf("condition number : %f \n",k );
+
+    float runTime = (float)(clock() - start);
+    printf("Runtime: %.f cycles\n", runTime);
 
     return 0;
 }

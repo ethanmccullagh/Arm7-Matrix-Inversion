@@ -4,8 +4,9 @@
 #include <string.h>
 #include <time.h>
 #include <arm_neon.h>
-#define ROWS 4
-#define COLS 4
+#include <math.h>
+#define ROWS 10
+#define COLS 10
 #define dCOLS COLS * 2
 #define SCALE 8
 
@@ -15,13 +16,35 @@ void belowDiagonal();
 void setOnes();
 void aboveDiagonal();
 void normalize();
+float getConditionNumber( float initial[ROWS][COLS], float inverseMatrix[ROWS][COLS]);
+float findMaxAbsValue (float matrix[ROWS][COLS]);
 
-// align memory to reduce cache misses 
+
+
+// align memory to reduce cache misses
+float initial[ROWS][COLS ] = {
+    {9 ,3 ,2 ,5 ,3 ,7 ,4 ,3 ,2 ,2},
+    {9 ,6 ,8 ,1 ,4 ,6 ,5 ,3 ,2 ,6},
+    {3 ,3 ,1 ,4 ,2 ,7 ,7 ,2 ,6 ,3},
+    {4 ,6 ,5 ,7 ,1 ,2 ,4 ,7 ,6 ,4},
+    {2 ,8 ,7 ,5 ,9 ,6 ,3 ,10 ,10 ,5},
+    {6 ,2 ,5 ,2 ,2 ,7 ,7 ,6 ,2 ,10},
+    {6 ,9 ,4 ,9 ,2 ,9 ,7 ,7 ,7 ,4},
+    {8 ,10 ,1 ,2 ,10 ,9 ,3 ,7 ,7 ,9},
+    {2 ,10 ,1 ,6 ,6 ,9 ,6 ,3 ,2 ,9},
+    {7 ,5 ,1 ,3 ,8 ,2 ,9 ,7 ,4 ,7}};
+
 int32_t matrix[ROWS][COLS * 2]__attribute__((aligned(16))) = {
-    {7, 7, 8, 3},
-    {9, 6, 1, 1},
-    {10, 3, 5, 0},
-    {5, 8, 6, 4}};
+    {9 ,3 ,2 ,5 ,3 ,7 ,4 ,3 ,2 ,2},
+    {9 ,6 ,8 ,1 ,4 ,6 ,5 ,3 ,2 ,6},
+    {3 ,3 ,1 ,4 ,2 ,7 ,7 ,2 ,6 ,3},
+    {4 ,6 ,5 ,7 ,1 ,2 ,4 ,7 ,6 ,4},
+    {2 ,8 ,7 ,5 ,9 ,6 ,3 ,10 ,10 ,5},
+    {6 ,2 ,5 ,2 ,2 ,7 ,7 ,6 ,2 ,10},
+    {6 ,9 ,4 ,9 ,2 ,9 ,7 ,7 ,7 ,4},
+    {8 ,10 ,1 ,2 ,10 ,9 ,3 ,7 ,7 ,9},
+    {2 ,10 ,1 ,6 ,6 ,9 ,6 ,3 ,2 ,9},
+    {7 ,5 ,1 ,3 ,8 ,2 ,9 ,7 ,4 ,7}};
 
 float result[ROWS][COLS * 2];
 
@@ -38,6 +61,9 @@ float32x4_t flo;
 
 int main(int argc, char *argv[])
 {
+    clock_t start;
+    start = clock();
+
     // build identity matrix
     for (i = 0; i < ROWS; i++)
     {
@@ -71,6 +97,35 @@ int main(int argc, char *argv[])
 
     normalize();
 
+    float inverseMatrix[ROWS][COLS];
+   
+
+    for(int i=0; i< ROWS; i++)
+    {
+        for( int j = 0 ; j < COLS; j++)
+        {
+            inverseMatrix[i][j] = result[i][j+COLS];
+         
+        }
+       
+    }    
+    
+    printf("Inverse Matrix: \n");
+
+    for (int i = 0; i < ROWS; i++) {
+        
+        for (int j = 0; j < COLS; j++) {
+            printf("%8.2f ", inverseMatrix[i][j]);
+        }
+        printf("\n");
+    }
+
+    float k = getConditionNumber(initial,inverseMatrix);
+    printf("condition number : %f \n",k );
+
+    float runTime = (float)(clock() - start);
+
+    printf("Runtime: %.f clock cycles\n", runTime);
 
     return 0;
 }
@@ -216,6 +271,36 @@ void aboveDiagonal()
             }
         }
     }
+}
+
+// returns the max value in a matrix
+float findMaxAbsValue (float matrix[ROWS][COLS])
+{
+    float maxVal = fabs(matrix[0][0]);
+
+    for(int i=0; i< ROWS; i++)
+    {
+        for( int j = 0; j < COLS; j++)
+        {
+            if(fabs(matrix[i][j]) > maxVal)
+            {
+                maxVal = matrix[i][j];
+            }
+        }
+    }
+
+    return maxVal;
+}
+
+
+// Returns the condition number 
+float getConditionNumber( float matrix[ROWS][COLS], float inverseMatrix[ROWS][COLS])
+{
+    
+    float matrixMaxVal = findMaxAbsValue(matrix);
+    float inverseMatrixMaxVal = findMaxAbsValue(inverseMatrix);
+
+   return matrixMaxVal * inverseMatrixMaxVal;
 }
 
 void printMatrix()
