@@ -281,7 +281,7 @@ float findMaxAbsValue (float matrix[ROWS][COLS])
 }
 
 // Returns the condition number 
-float getConditionNumber( float matrix[ROWS][COLS], float inverseMatrix[ROWS][COLS])
+float getConditionNumber( int32_t matrix[ROWS][COLS], float inverseMatrix[ROWS][COLS])
 {
     
     float matrixMaxVal = findMaxAbsValue(matrix);
