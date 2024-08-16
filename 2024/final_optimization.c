@@ -16,13 +16,13 @@ void belowDiagonal();
 void setOnes();
 void aboveDiagonal();
 void normalize();
-float getConditionNumber( int32_t initial[ROWS][COLS], int32_t inverseMatrix[ROWS][COLS]);
-float findMaxAbsValue (int32_t matrix[ROWS][COLS]);
+float getConditionNumber( float initial[ROWS][COLS], float inverseMatrix[ROWS][COLS]);
+float findMaxAbsValue (float matrix[ROWS][COLS]);
 
 
 
 // align memory to reduce cache misses
-int32_t initial[ROWS][COLS ] = {
+float initial[ROWS][COLS ] = {
     {9 ,3 ,2 ,5 ,3 ,7 ,4 ,3 ,2 ,2},
     {9 ,6 ,8 ,1 ,4 ,6 ,5 ,3 ,2 ,6},
     {3 ,3 ,1 ,4 ,2 ,7 ,7 ,2 ,6 ,3},
@@ -97,7 +97,7 @@ int main(int argc, char *argv[])
 
     normalize();
 
-    int32_t inverseMatrix[ROWS][COLS];
+    float inverseMatrix[ROWS][COLS];
    
 
     for(int i=0; i< ROWS; i++)
@@ -275,7 +275,7 @@ void aboveDiagonal()
 }
 
 // returns the max value in a matrix
-float findMaxAbsValue (int32_t matrix[ROWS][COLS])
+float findMaxAbsValue (float matrix[ROWS][COLS])
 {
     float maxVal = fabs(matrix[0][0]);
 
@@ -295,7 +295,7 @@ float findMaxAbsValue (int32_t matrix[ROWS][COLS])
 
 
 // Returns the condition number 
-float getConditionNumber( int32_t matrix[ROWS][COLS], int32_t inverseMatrix[ROWS][COLS])
+float getConditionNumber( float matrix[ROWS][COLS], float inverseMatrix[ROWS][COLS])
 {
     
     float matrixMaxVal = findMaxAbsValue(matrix);
