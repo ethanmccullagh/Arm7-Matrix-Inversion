@@ -80,6 +80,33 @@ int main(int argc, char *argv[])
 
     normalize();
 
+    float inverseMatrix[ROWS][COLS];
+   
+
+    for(int i=0; i< ROWS; i++)
+    {
+        for( int j = 0 ; j < COLS; j++)
+        {
+            inverseMatrix[i][j] = matrix[i][j+COLS];
+         
+        }
+       
+    }
+
+
+    printf("Invers Matrix: \n");
+
+    for (int i = 0; i < ROWS; i++) {
+        
+        for (int j = 0; j < COLS; j++) {
+            printf("%8.2f ", inverseMatrix[i][j]);
+        }
+        printf("\n");
+    }
+
+    float k = getConditionNumber(initial,inverseMatrix);
+    printf("condition number : %f \n",k );
+
     float runTime = (float)(clock() - start);
 
     printf("Runtime: %.f clock cycles\n", runTime);
@@ -228,6 +255,35 @@ void aboveDiagonal()
             }
         }
     }
+}
+
+// returns the max value in a matrix
+float findMaxAbsValue (float matrix[ROWS][COLS])
+{
+    float maxVal = fabs(matrix[0][0]);
+
+    for(int i=0; i< ROWS; i++)
+    {
+        for( int j = 0; j < COLS; j++)
+        {
+            if(fabs(matrix[i][j]) > maxVal)
+            {
+                maxVal = matrix[i][j];
+            }
+        }
+    }
+
+    return maxVal;
+}
+
+// Returns the condition number 
+float getConditionNumber( float matrix[ROWS][COLS], float inverseMatrix[ROWS][COLS])
+{
+    
+    float matrixMaxVal = findMaxAbsValue(matrix);
+    float inverseMatrixMaxVal = findMaxAbsValue(inverseMatrix);
+
+   return matrixMaxVal * inverseMatrixMaxVal;
 }
 
 void printMatrix()

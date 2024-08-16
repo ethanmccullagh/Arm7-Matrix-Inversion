@@ -69,7 +69,6 @@ int main(int argc, char *argv[])
     aboveDiagonal();
     printMatrix(&matrix);
 
-    float values[25];
     float inverseMatrix[ROWS][COLS];
    
 
@@ -84,7 +83,6 @@ int main(int argc, char *argv[])
     }
 
 
-    //in order to use code below need to store inverse matrix somewhere 
     printf("Invers Matrix: \n");
 
     for (int i = 0; i < ROWS; i++) {
