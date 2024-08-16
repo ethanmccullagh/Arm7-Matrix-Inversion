@@ -15,6 +15,9 @@ void belowDiagonal();
 void setOnes();
 void aboveDiagonal();
 void normalize();
+float getConditionNumber( float matrix[ROWS][COLS], float inverseMatrix[ROWS][COLS]);
+float findMaxAbsValue (float matrix[ROWS][COLS]);
+
 
 // align memory to reduce cache misses 
 int32_t matrix[ROWS][COLS * 2]__attribute__((aligned(16))) = {
