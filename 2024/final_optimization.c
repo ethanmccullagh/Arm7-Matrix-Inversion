@@ -262,7 +262,24 @@ void aboveDiagonal()
 }
 
 // returns the max value in a matrix
-float findMaxAbsValue (float matrix[ROWS][COLS])
+float findMaxAbsValue (int32_t matrix[ROWS][COLS])
+{
+    float maxVal = fabs(matrix[0][0]);
+
+    for(int i=0; i< ROWS; i++)
+    {
+        for( int j = 0; j < COLS; j++)
+        {
+            if(fabs(matrix[i][j]) > maxVal)
+            {
+                maxVal = matrix[i][j];
+            }
+        }
+    }
+
+    return maxVal;
+}
+float findMaxAbsValuefloat (float matrix[ROWS][COLS])
 {
     float maxVal = fabs(matrix[0][0]);
 
@@ -285,7 +302,7 @@ float getConditionNumber( int32_t matrix[ROWS][COLS], float inverseMatrix[ROWS][
 {
     
     float matrixMaxVal = findMaxAbsValue(matrix);
-    float inverseMatrixMaxVal = findMaxAbsValue(inverseMatrix);
+    float inverseMatrixMaxVal = findMaxAbsValuefloat(inverseMatrix);
 
    return matrixMaxVal * inverseMatrixMaxVal;
 }
