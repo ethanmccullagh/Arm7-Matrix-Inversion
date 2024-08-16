@@ -107,7 +107,7 @@ int main(int argc, char *argv[])
         printf("\n");
     }
 
-    float k = getConditionNumber(initial,inverseMatrix);
+    float k = getConditionNumber(matrix,inverseMatrix);
     printf("condition number : %f \n",k );
 
     float runTime = (float)(clock() - start);
