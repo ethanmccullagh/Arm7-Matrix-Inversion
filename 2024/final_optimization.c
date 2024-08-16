@@ -22,7 +22,7 @@ float findMaxAbsValue (int32_t matrix[ROWS][COLS]);
 
 
 // align memory to reduce cache misses
-int32_t initial[ROWS][COLS * 2]__attribute__((aligned(16))) = {
+int32_t initial[ROWS][COLS ] = {
     {9 ,3 ,2 ,5 ,3 ,7 ,4 ,3 ,2 ,2},
     {9 ,6 ,8 ,1 ,4 ,6 ,5 ,3 ,2 ,6},
     {3 ,3 ,1 ,4 ,2 ,7 ,7 ,2 ,6 ,3},
