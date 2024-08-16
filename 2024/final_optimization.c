@@ -104,7 +104,7 @@ int main(int argc, char *argv[])
     {
         for( int j = 0 ; j < COLS; j++)
         {
-            inverseMatrix[i][j] = matrix[i][j+COLS];
+            inverseMatrix[i][j] = result[i][j+COLS];
          
         }
        
