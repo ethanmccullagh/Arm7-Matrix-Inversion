@@ -4,6 +4,7 @@
 #include <string.h>
 #include <time.h>
 #include <arm_neon.h>
+#include <math.h>
 #define ROWS 10
 #define COLS 10
 #define dCOLS COLS * 2
