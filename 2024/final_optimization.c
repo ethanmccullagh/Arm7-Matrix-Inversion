@@ -16,7 +16,8 @@ void belowDiagonal();
 void setOnes();
 void aboveDiagonal();
 void normalize();
-float getConditionNumber( float matrix[ROWS][COLS], float inverseMatrix[ROWS][COLS]);
+float getConditionNumber( int32_t matrix[ROWS][COLS], float inverseMatrix[ROWS][COLS]);
+float findMaxAbsValue (int32_t matrix[ROWS][COLS]);
 float findMaxAbsValue (float matrix[ROWS][COLS]);
 
 
