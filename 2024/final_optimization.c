@@ -18,7 +18,7 @@ void aboveDiagonal();
 void normalize();
 float getConditionNumber( int32_t matrix[ROWS][COLS], float inverseMatrix[ROWS][COLS]);
 float findMaxAbsValue (int32_t matrix[ROWS][COLS]);
-float findMaxAbsValue (float matrix[ROWS][COLS]);
+float findMaxAbsValuefloat (float matrix[ROWS][COLS]);
 
 
 // align memory to reduce cache misses 
